@@ -1,0 +1,18 @@
+#!/bin/bash
+
+# docker run --rm -v `pwd`:/app -w /app --entrypoint=./generate_example_image dpokidov/imagemagick
+
+set -eu
+
+for i in {1..9}; do
+  convert \
+    -size 98x98 xc:white -gravity center \
+    -fill black -bordercolor black -border 1 \
+    -pointsize 72 -font "DejaVu-Sans-Mono" -annotate 0 "$i" \
+    output$i.png
+done
+
+montage output{1..9}.png -tile 3x3 -geometry +0+0 spritesheet.png
+
+rm output*.png
+
