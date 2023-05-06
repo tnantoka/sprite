@@ -4,15 +4,16 @@
 
 set -eu
 
-for i in {1..9}; do
+for i in {1..36}; do
   convert \
-    -size 98x98 xc:white -gravity center \
+    -size 62x62 xc:white -gravity center \
     -fill black -bordercolor black -border 1 \
-    -pointsize 72 -font "DejaVu-Sans-Mono" -annotate 0 "$i" \
+    -pointsize 48 -font "DejaVu-Sans-Mono" -annotate 0 "$i" \
     output$i.png
+    # -pointsize 48 -font "DejaVu-Sans-Mono-Oblique" -annotate 0 "$i" \
 done
 
-montage output{1..9}.png -tile 3x3 -geometry +0+0 spritesheet.png
+montage output{1..36}.png -tile 6x6 -geometry +0+0 spritesheet.png
 
 rm output*.png
 

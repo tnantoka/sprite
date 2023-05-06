@@ -4,72 +4,64 @@ import 'dart:async';
 import 'dart:ui' as ui;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'animation_painter.dart';
 
 class Sprite extends StatefulWidget {
   const Sprite({
     super.key,
     this.imagePath,
     this.image,
+    required this.size,
     required this.amount,
     this.scale = 1,
-    this.stepTime = 200,
-  });
+    this.stepTime = 300,
+    this.axis = Axis.horizontal,
+    this.paused = false,
+    this.offsetX = 0,
+    this.offsetY = 0,
+  }) : assert(imagePath != null || image != null);
 
   final String? imagePath;
   final ui.Image? image;
-  final int amount;
   final int scale;
   final int stepTime;
+  final Size size;
+  final Axis axis;
+  final bool paused;
+  final int offsetX;
+  final int offsetY;
+  final int amount;
 
   @override
   State<Sprite> createState() => _SpriteState();
 }
 
 class _SpriteState extends State<Sprite> {
-  ui.Image? _image;
-  Timer? _animationTimer;
   int _index = 0;
+  Timer? _animationTimer;
+  ui.Image? _loadedImage;
+
+  ui.Image? get _image => widget.image ?? _loadedImage;
 
   @override
   void initState() {
     super.initState();
 
-    _setImage();
-
-    _animationTimer = Timer.periodic(
-      Duration(milliseconds: widget.stepTime),
-      (_) {
-        setState(() {
-          _index = (_index + 1) % widget.amount;
-        });
-      },
-    );
+    _init();
   }
 
   @override
   void didUpdateWidget(covariant Sprite oldWidget) {
     super.didUpdateWidget(oldWidget);
 
-    if (oldWidget.imagePath != widget.imagePath ||
-        oldWidget.image != widget.image) {
-      _setImage();
+    if (oldWidget.stepTime != widget.stepTime ||
+        oldWidget.paused != widget.paused) {
+      _setTimer();
     }
-  }
 
-  _setImage() {
-    if (widget.image != null) {
-      _image = widget.image;
-    } else if (widget.imagePath != null) {
+    if (oldWidget.imagePath != widget.imagePath) {
       _loadImage();
     }
-  }
-
-  void _loadImage() async {
-    final data = await rootBundle.load(widget.imagePath!);
-    final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
-    final frame = await codec.getNextFrame();
-    _image = frame.image;
-    setState(() {});
   }
 
   @override
@@ -85,44 +77,55 @@ class _SpriteState extends State<Sprite> {
     }
 
     return CustomPaint(
-      painter: _SpriteAnimationPainter(
+      painter: AnimationPainter(
         image: _image!,
-        amount: widget.amount,
+        sourceSize: widget.size,
         scale: widget.scale,
         index: _index,
+        axis: widget.axis,
+        offsetX: widget.offsetX,
+        offsetY: widget.offsetY,
       ),
-      size: Size(
-        _image!.width / widget.amount * widget.scale,
-        _image!.height * widget.scale.toDouble(),
-      ),
+      size: widget.size * widget.scale.toDouble(),
     );
   }
-}
 
-class _SpriteAnimationPainter extends CustomPainter {
-  _SpriteAnimationPainter({
-    required this.image,
-    required this.amount,
-    required this.scale,
-    required this.index,
-  });
-
-  final ui.Image image;
-  final int amount;
-  final int scale;
-  final int index;
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final srcWidth = image.width / amount;
-    final srcHeight = image.height.toDouble();
-    final srcRect = Rect.fromLTWH(index * srcWidth, 0, srcWidth, srcHeight);
-    final dstRect = Rect.fromLTWH(0, 0, size.width, size.height);
-    canvas.drawImageRect(image, srcRect, dstRect, Paint());
+  _init() async {
+    await _loadImage();
+    await _setTimer();
   }
 
-  @override
-  bool shouldRepaint(_SpriteAnimationPainter oldDelegate) {
-    return image != oldDelegate.image || index != oldDelegate.index;
+  _loadImage() async {
+    if (widget.image != null) {
+      return;
+    }
+
+    final data = await rootBundle.load(widget.imagePath!);
+    final codec = await ui.instantiateImageCodec(data.buffer.asUint8List());
+    final frame = await codec.getNextFrame();
+    setState(() {
+      _loadedImage = frame.image;
+    });
+  }
+
+  _setTimer() {
+    _animationTimer?.cancel();
+
+    if (widget.paused) {
+      return;
+    }
+
+    _animationTimer = Timer.periodic(
+      Duration(milliseconds: widget.stepTime),
+      (_) {
+        if (widget.paused || _image == null) {
+          return;
+        }
+
+        setState(() {
+          _index = (_index + 1) % widget.amount;
+        });
+      },
+    );
   }
 }
