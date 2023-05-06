@@ -57,7 +57,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
     final code = '''
 Sprite(
-  imagePath: $imagePath,
+  imagePath: '$imagePath',
   size: $size,
   amount: $amount,
   scale: $scale,
@@ -66,8 +66,7 @@ Sprite(
   paused: $paused,
   offsetX: $offsetX,
   offsetY: $offsetY,
-});
-    ''';
+)''';
 
     return Scaffold(
       appBar: AppBar(
@@ -76,60 +75,107 @@ Sprite(
       body: Center(
         child: Row(
           children: [
-            Sprite(
-              imagePath: imagePath,
-              scale: scale,
-              size: size,
-              amount: amount,
-              offsetX: offsetX,
-              offsetY: offsetY,
-              stepTime: stepTime,
-              axis: axis,
-              paused: paused,
-            ),
-            Stack(
-              children: [
-                Image(
-                  image: AssetImage(imagePath),
-                ),
-                Container(
-                  margin: EdgeInsets.only(
-                    left: offsetX * length,
-                    top: offsetY * length,
-                  ),
-                  width: width,
-                  height: height,
-                  decoration: BoxDecoration(
-                    border: Border.all(
-                      color: Colors.red,
-                      width: 2,
+            Expanded(
+              child: Container(
+                decoration: const BoxDecoration(
+                  border: Border(
+                    right: BorderSide(
+                      color: Colors.grey,
+                      width: 1,
                     ),
                   ),
-                )
+                ),
+                child: Column(
+                  children: [
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 16),
+                      decoration: BoxDecoration(
+                        color: Colors.grey[200],
+                        border: const Border(
+                          bottom: BorderSide(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                        ),
+                      ),
+                      height: 400,
+                      child: Center(
+                        child: Sprite(
+                          imagePath: imagePath,
+                          scale: scale,
+                          size: size,
+                          amount: amount,
+                          offsetX: offsetX,
+                          offsetY: offsetY,
+                          stepTime: stepTime,
+                          axis: axis,
+                          paused: paused,
+                        ),
+                      ),
+                    ),
+                    Stack(
+                      children: [
+                        Image(
+                          image: AssetImage(imagePath),
+                        ),
+                        Container(
+                          margin: EdgeInsets.only(
+                            left: offsetX * length,
+                            top: offsetY * length,
+                          ),
+                          width: width,
+                          height: height,
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: Colors.red,
+                              width: 4,
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
+              ),
+            ),
+            Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  width: 240,
+                  child: Column(
+                    children: [
+                      _imageField(),
+                      _amountField(),
+                      _axisField(),
+                      _scaleField(),
+                      _lengthField(),
+                      _offsetXField(),
+                      _offsetYField(),
+                      _stepTimeField(),
+                      _pausedField(),
+                      Container(
+                        margin: const EdgeInsets.symmetric(vertical: 16),
+                        padding: const EdgeInsets.all(4),
+                        decoration: BoxDecoration(
+                          border: Border.all(
+                            color: Colors.grey,
+                            width: 1,
+                          ),
+                        ),
+                        child: Text(code),
+                      ),
+                      ElevatedButton.icon(
+                        onPressed: () => Clipboard.setData(
+                          ClipboardData(text: code),
+                        ),
+                        icon: const Icon(Icons.copy, size: 16),
+                        label: const Text('Copy'),
+                      ),
+                    ],
+                  ),
+                ),
               ],
-            ),
-            Container(
-              width: 200,
-              child: Column(
-                children: [
-                  _imageField(),
-                  _amountField(),
-                  _axisField(),
-                  _scaleField(),
-                  _lengthField(),
-                  _offsetXField(),
-                  _offsetYField(),
-                  _stepTimeField(),
-                  _pausedField(),
-                ],
-              ),
-            ),
-            Text(code),
-            IconButton(
-              onPressed: () => Clipboard.setData(
-                ClipboardData(text: code),
-              ),
-              icon: const Icon(Icons.copy),
             ),
           ],
         ),
