@@ -1,7 +1,7 @@
 name: sprite
-description: A new Flutter package project.
+description: Animated sprite widget but not for game.
 version: 0.0.1
-homepage:
+homepage: https://github.com/tnantoka/sprite
 
 environment:
   sdk: '>=2.19.6 <3.0.0'
