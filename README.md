@@ -10,9 +10,16 @@ Animated sprite widget but not for game.
 
 https://sprite.tnantoka.com/
 
-![](/demo/sprite.gif)
+![](https://github.com/tnantoka/sprite/raw/main/demo/sprite.gif)
 
 ## Usage
+
+```yaml
+dependencies:
+  flutter:
+    sdk: flutter
+  sprite: ^0.0.1
+```
 
 ```dart
 import 'package:sprite/sprite.dart';
