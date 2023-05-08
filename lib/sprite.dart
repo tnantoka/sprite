@@ -20,6 +20,8 @@ class Sprite extends StatefulWidget {
     this.paused = false,
     this.offsetX = 0,
     this.offsetY = 0,
+    this.flipX = false,
+    this.flipY = false,
   }) : assert(imagePath != null || image != null);
 
   final String? imagePath;
@@ -32,6 +34,8 @@ class Sprite extends StatefulWidget {
   final int offsetX;
   final int offsetY;
   final int amount;
+  final bool flipX;
+  final bool flipY;
 
   @override
   State<Sprite> createState() => _SpriteState();
@@ -86,6 +90,8 @@ class _SpriteState extends State<Sprite> {
         axis: widget.axis,
         offsetX: widget.offsetX,
         offsetY: widget.offsetY,
+        flipX: widget.flipX,
+        flipY: widget.flipY,
       ),
       size: widget.size * widget.scale,
     );

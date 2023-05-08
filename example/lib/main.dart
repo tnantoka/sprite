@@ -43,6 +43,8 @@ class _MyHomePageState extends State<MyHomePage> {
   var stepTime = 500;
   var image = 1;
   var paused = false;
+  var flipX = false;
+  var flipY = false;
 
   @override
   void dispose() {
@@ -68,6 +70,8 @@ Sprite(
   paused: $paused,
   offsetX: $offsetX,
   offsetY: $offsetY,
+  flipX: $flipX,
+  flipY: $flipY,
 )''';
 
     return Scaffold(
@@ -111,6 +115,8 @@ Sprite(
                             stepTime: stepTime,
                             axis: axis,
                             paused: paused,
+                            flipX: flipX,
+                            flipY: flipY,
                           ),
                         ),
                       ),
@@ -159,6 +165,7 @@ Sprite(
                           _stepTimeField(),
                           _lengthField(),
                           _scaleField(),
+                          _pausedField(),
                         ],
                       ),
                     ),
@@ -171,7 +178,8 @@ Sprite(
                           _amountField(),
                           _offsetXField(),
                           _offsetYField(),
-                          _pausedField(),
+                          _flipXField(),
+                          _flipYField(),
                         ],
                       ),
                     ),
@@ -373,6 +381,46 @@ Sprite(
       onChanged: (bool? value) {
         setState(() {
           paused = value!;
+        });
+      },
+      items: [true, false].map((bool value) {
+        return DropdownMenuItem(
+          value: value,
+          child: Text(value.toString()),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _flipXField() {
+    return DropdownButtonFormField(
+      decoration: const InputDecoration(
+        labelText: 'flipX',
+      ),
+      value: flipX,
+      onChanged: (bool? value) {
+        setState(() {
+          flipX = value!;
+        });
+      },
+      items: [true, false].map((bool value) {
+        return DropdownMenuItem(
+          value: value,
+          child: Text(value.toString()),
+        );
+      }).toList(),
+    );
+  }
+
+  Widget _flipYField() {
+    return DropdownButtonFormField(
+      decoration: const InputDecoration(
+        labelText: 'flipY',
+      ),
+      value: flipY,
+      onChanged: (bool? value) {
+        setState(() {
+          flipY = value!;
         });
       },
       items: [true, false].map((bool value) {

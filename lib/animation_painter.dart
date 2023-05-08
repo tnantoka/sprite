@@ -10,6 +10,8 @@ class AnimationPainter extends CustomPainter {
     required this.axis,
     required this.offsetX,
     required this.offsetY,
+    required this.flipX,
+    required this.flipY,
   });
 
   final ui.Image image;
@@ -19,6 +21,8 @@ class AnimationPainter extends CustomPainter {
   final Axis axis;
   final int offsetX;
   final int offsetY;
+  final bool flipX;
+  final bool flipY;
 
   @override
   void paint(Canvas canvas, Size size) {
@@ -29,6 +33,14 @@ class AnimationPainter extends CustomPainter {
       sourceSize.height,
     );
     final dstRect = Rect.fromLTWH(0, 0, size.width, size.height);
+    canvas.translate(
+      flipX ? size.width : 0,
+      flipY ? size.height : 0,
+    );
+    canvas.scale(
+      flipX ? -1 : 1,
+      flipY ? -1 : 1,
+    );
     canvas.drawImageRect(image, srcRect, dstRect, Paint());
   }
 
