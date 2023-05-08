@@ -13,7 +13,7 @@ class Sprite extends StatefulWidget {
     this.image,
     required this.size,
     required this.amount,
-    this.scale = 1,
+    this.scale = 1.0,
     this.stepTime = 300,
     this.axis = Axis.horizontal,
     this.paused = false,
@@ -23,7 +23,7 @@ class Sprite extends StatefulWidget {
 
   final String? imagePath;
   final ui.Image? image;
-  final int scale;
+  final double scale;
   final int stepTime;
   final Size size;
   final Axis axis;
@@ -86,7 +86,7 @@ class _SpriteState extends State<Sprite> {
         offsetX: widget.offsetX,
         offsetY: widget.offsetY,
       ),
-      size: widget.size * widget.scale.toDouble(),
+      size: widget.size * widget.scale,
     );
   }
 

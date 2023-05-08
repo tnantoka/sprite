@@ -36,7 +36,7 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   var amount = 3;
   var axis = Axis.horizontal;
-  var scale = 1;
+  var scale = 1.0;
   var length = 64.0;
   var offsetX = 0;
   var offsetY = 0;
@@ -270,12 +270,12 @@ Sprite(
         labelText: 'scale',
       ),
       value: scale,
-      onChanged: (int? value) {
+      onChanged: (double? value) {
         setState(() {
           scale = value!;
         });
       },
-      items: [1, 2, 3].map((int value) {
+      items: [0.5, 1.0, 2.0, 3.0].map((double value) {
         return DropdownMenuItem(
           value: value,
           child: Text(value.toString()),

@@ -16,7 +16,7 @@ class AnimationPainter extends CustomPainter {
 
   final ui.Image image;
   final Size sourceSize;
-  final int scale;
+  final double scale;
   final int index;
   final Axis axis;
   final int offsetX;
