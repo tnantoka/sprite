@@ -24,17 +24,40 @@ class Sprite extends StatefulWidget {
     this.flipY = false,
   }) : assert(imagePath != null || image != null);
 
+  /// Path to sprite sheet image. required if [image] is null.
   final String? imagePath;
+
+  /// Sprite sheet image. required if [imagePath] is null.
   final ui.Image? image;
+
+  /// Scale for resinzing sprite.
   final double scale;
+
+  /// Time between animation steps.
   final int stepTime;
+
+  /// Size of single sprite.
   final Size size;
+
+  /// Axis of animation in sprite sheet.
   final Axis axis;
+
+  /// Is animation paused.
   final bool paused;
+
+  /// X offset of start sprite in sprite sheet.
   final int offsetX;
+
+  /// Y offset of start sprite in sprite sheet.
   final int offsetY;
+
+  /// Amount of sprites in sprite sheet.
   final int amount;
+
+  /// Flip animation horizontally.
   final bool flipX;
+
+  /// Flip animation vertically.
   final bool flipY;
 
   @override
