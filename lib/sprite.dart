@@ -1,3 +1,4 @@
+/// Animated widget with sprite sheet image.
 library sprite;
 
 import 'dart:async';
